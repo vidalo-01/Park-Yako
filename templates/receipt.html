@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Payment confirmed — Park Yako</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<div class="hazard-strip"></div>
+<header>
+    <div class="brand">
+        <svg width="34" height="34" viewBox="0 0 34 34" xmlns="http://www.w3.org/2000/svg">
+            <rect x="4" y="8" width="6" height="22" fill="#a9a79f"/>
+            <g transform="rotate(-18 9 12)">
+                <rect x="9" y="9" width="24" height="6" fill="#ffc72c"/>
+                <rect x="9" y="9" width="6" height="6" fill="#1a1a1a"/>
+                <rect x="21" y="9" width="6" height="6" fill="#1a1a1a"/>
+            </g>
+        </svg>
+        <div>
+            <h1>Park Yako</h1>
+            <span class="tag">parking management</span>
+        </div>
+    </div>
+    <nav>
+        <a href="{{ url_for('dashboard') }}">Dashboard</a>
+        <a href="{{ url_for('checkout_preview') }}">Exit / Pay</a>
+        <a href="{{ url_for('history') }}">History</a>
+    </nav>
+</header>
+<main>
+    <div class="gate-scene open">
+        <div class="gate-mechanism">
+            <div class="gate-post"></div>
+            <div class="gate-arm"></div>
+        </div>
+        <div class="gate-status">Gate open — drive through</div>
+    </div>
+
+    <div class="ticket">
+        <h2>Receipt</h2>
+        <div class="ticket-row"><span>Plate</span><strong>{{ receipt.plate_number }}</strong></div>
+        <div class="ticket-row"><span>Bay</span><strong>{{ receipt.slot_number }}</strong></div>
+        <div class="ticket-row"><span>Entry</span><strong>{{ receipt.entry_time.strftime('%Y-%m-%d %H:%M:%S') }}</strong></div>
+        <div class="ticket-row"><span>Exit</span><strong>{{ receipt.exit_time.strftime('%Y-%m-%d %H:%M:%S') }}</strong></div>
+        <div class="ticket-row"><span>Duration</span><strong>{{ receipt.minutes }} min</strong></div>
+        <div class="ticket-total"><span>Paid</span><span>Kshs. {{ receipt.fee }}</span></div>
+        {% if receipt.mpesa_receipt %}
+        <div class="ticket-row"><span>M-Pesa receipt</span><strong>{{ receipt.mpesa_receipt }}</strong></div>
+        {% endif %}
+        <div class="barcode"></div>
+    </div>
+
+    <div style="text-align:center;">
+        <a class="button-link" href="{{ url_for('dashboard') }}"><button>Back to dashboard</button></a>
+    </div>
+</main>
+</body>
+</html>

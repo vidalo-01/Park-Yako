@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>History — Park Yako</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<div class="hazard-strip"></div>
+<header>
+    <div class="brand">
+        <svg width="34" height="34" viewBox="0 0 34 34" xmlns="http://www.w3.org/2000/svg">
+            <rect x="4" y="8" width="6" height="22" fill="#a9a79f"/>
+            <g transform="rotate(-18 9 12)">
+                <rect x="9" y="9" width="24" height="6" fill="#ffc72c"/>
+                <rect x="9" y="9" width="6" height="6" fill="#1a1a1a"/>
+                <rect x="21" y="9" width="6" height="6" fill="#1a1a1a"/>
+            </g>
+        </svg>
+        <div>
+            <h1>Park Yako</h1>
+            <span class="tag">parking management</span>
+        </div>
+    </div>
+    <nav>
+        <a href="{{ url_for('dashboard') }}">Dashboard</a>
+        <a href="{{ url_for('checkout_preview') }}">Exit / Pay</a>
+        <a href="{{ url_for('history') }}">History</a>
+        <a href="{{ url_for('logout') }}">Logout</a>
+    </nav>
+</header>
+<main>
+    <h2 style="font-size:1.1rem; margin-bottom:0.8rem;">Session ledger</h2>
+    <div class="ledger-wrap">
+        <table>
+            <tr>
+                <th>Plate</th><th>Bay</th><th>Entry</th><th>Exit</th><th>Fee (Kshs)</th><th>Status</th>
+            </tr>
+            {% for r in rows %}
+            <tr>
+                <td>{{ r.plate_number }}</td>
+                <td>{{ r.slot_number }}</td>
+                <td>{{ r.entry_time }}</td>
+                <td>{{ r.exit_time or '—' }}</td>
+                <td>{{ r.fee if r.fee is not none else '—' }}</td>
+                <td>{{ r.status }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+</main>
+</body>
+</html>

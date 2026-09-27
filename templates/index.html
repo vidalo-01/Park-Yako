@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Park Yako — Parking System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<div class="hazard-strip"></div>
+<header>
+    <div class="brand">
+        <svg width="34" height="34" viewBox="0 0 34 34" xmlns="http://www.w3.org/2000/svg">
+            <rect x="4" y="8" width="6" height="22" fill="#a9a79f"/>
+            <g transform="rotate(-18 9 12)">
+                <rect x="9" y="9" width="24" height="6" fill="#ffc72c"/>
+                <rect x="9" y="9" width="6" height="6" fill="#1a1a1a"/>
+                <rect x="21" y="9" width="6" height="6" fill="#1a1a1a"/>
+            </g>
+        </svg>
+        <div>
+            <h1>Park Yako</h1>
+            <span class="tag">parking management</span>
+        </div>
+    </div>
+    <nav>
+        <a href="{{ url_for('dashboard') }}">Dashboard</a>
+        <a href="{{ url_for('checkout_preview') }}">Exit / Pay</a>
+        <a href="{{ url_for('history') }}">History</a>
+        <a href="{{ url_for('logout') }}">Logout</a>
+    </nav>
+</header>
+<main>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% for category, message in messages %}
+            <div class="flash {{ category }}">{{ message }}</div>
+        {% endfor %}
+    {% endwith %}
+
+    <div class="gate-board">
+        <div class="digits">{{ available }}<span class="of">/ {{ total }}</span></div>
+        <div class="caption {{ 'full' if available == 0 else '' }}">
+            {{ 'spaces available' if available > 0 else 'car park full' }}
+        </div>
+    </div>
+
+    <div class="kiosk">
+        <h2>Vehicle arrival</h2>
+        <form method="POST" action="{{ url_for('entry') }}">
+            <input type="text" name="plate_number" placeholder="e.g. KDA 123B" required>
+            <button type="submit">Record entry</button>
+        </form>
+    </div>
+
+    <h2 style="font-size:1.1rem; margin-bottom:0.8rem;">Bay layout</h2>
+    <div class="bay-grid">
+        {% for slot in slots %}
+            <div class="bay {{ slot.status }}">
+                {{ slot.slot_number }}
+                {% if slot.plate_number %}<span class="plate">{{ slot.plate_number }}</span>{% endif %}
+            </div>
+        {% endfor %}
+    </div>
+</main>
+</body>
+</html>

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>M-Pesa payment — Park Yako</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<div class="hazard-strip"></div>
+<header>
+    <div class="brand">
+        <svg width="34" height="34" viewBox="0 0 34 34" xmlns="http://www.w3.org/2000/svg">
+            <rect x="4" y="8" width="6" height="22" fill="#a9a79f"/>
+            <g transform="rotate(-18 9 12)">
+                <rect x="9" y="9" width="24" height="6" fill="#ffc72c"/>
+                <rect x="9" y="9" width="6" height="6" fill="#1a1a1a"/>
+                <rect x="21" y="9" width="6" height="6" fill="#1a1a1a"/>
+            </g>
+        </svg>
+        <div>
+            <h1>Park Yako</h1>
+            <span class="tag">parking management</span>
+        </div>
+    </div>
+</header>
+<main>
+    <div class="kiosk payment-wait">
+        <h2>Payment prompt sent</h2>
+        <p>{{ customer_message }}</p>
+        <p><strong>Check your phone and enter your M-Pesa PIN.</strong></p>
+        <p class="payment-state" id="payment-state">Waiting for payment confirmation…</p>
+    </div>
+
+    <div class="ticket">
+        <h2>Parking payment</h2>
+        <div class="ticket-row"><span>Plate</span><strong>{{ payment.plate_number }}</strong></div>
+        <div class="ticket-row"><span>Amount</span><strong>Kshs. {{ payment.fee }}</strong></div>
+        <div class="ticket-row"><span>Session</span><strong>#{{ payment.session_id }}</strong></div>
+        <div class="barcode"></div>
+    </div>
+
+    <div style="text-align:center;">
+        <a class="button-link" href="{{ url_for('checkout_preview', plate_number=payment.plate_number) }}">
+            <button type="button">Back to payment</button>
+        </a>
+    </div>
+</main>
+
+<script>
+const sessionId = {{ payment.session_id }};
+let attempts = 0;
+
+async function checkPayment() {
+    attempts += 1;
+    try {
+        const response = await fetch(`/payment/status/${sessionId}`, {cache: "no-store"});
+        const data = await response.json();
+
+        if (data.payment_status === "paid" && data.receipt) {
+            document.getElementById("payment-state").textContent =
+                "Payment confirmed. Opening gate…";
+            window.location.href = `/receipt/${sessionId}`;
+            return;
+        }
+
+        if (data.payment_status === "failed") {
+            document.getElementById("payment-state").textContent =
+                "Payment was not completed. You can try again.";
+            return;
+        }
+    } catch (error) {
+        document.getElementById("payment-state").textContent =
+            "Still waiting for payment confirmation…";
+    }
+
+    if (attempts < 120) {
+        setTimeout(checkPayment, 5000);
+    } else {
+        document.getElementById("payment-state").textContent =
+            "Still pending. Please check your M-Pesa messages or return to payment.";
+    }
+}
+checkPayment();
+</script>
+</body>
+</html>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Exit / Pay — Park Yako</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<div class="hazard-strip"></div>
+<header>
+    <div class="brand">
+        <svg width="34" height="34" viewBox="0 0 34 34" xmlns="http://www.w3.org/2000/svg">
+            <rect x="4" y="8" width="6" height="22" fill="#a9a79f"/>
+            <g transform="rotate(-18 9 12)">
+                <rect x="9" y="9" width="24" height="6" fill="#ffc72c"/>
+                <rect x="9" y="9" width="6" height="6" fill="#1a1a1a"/>
+                <rect x="21" y="9" width="6" height="6" fill="#1a1a1a"/>
+            </g>
+        </svg>
+        <div>
+            <h1>Park Yako</h1>
+            <span class="tag">parking management</span>
+        </div>
+    </div>
+    <nav>
+        <a href="{{ url_for('dashboard') }}">Dashboard</a>
+        <a href="{{ url_for('checkout_preview') }}">Exit / Pay</a>
+        <a href="{{ url_for('history') }}">History</a>
+        <a href="{{ url_for('logout') }}">Logout</a>
+    </nav>
+</header>
+<main>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% for category, message in messages %}
+            <div class="flash {{ category }}">{{ message }}</div>
+        {% endfor %}
+    {% endwith %}
+
+    <div class="kiosk">
+        <h2>Vehicle exit</h2>
+        <form method="GET" action="{{ url_for('checkout_preview') }}">
+            <input type="text" name="plate_number" placeholder="Enter number plate" value="{{ plate or '' }}" required>
+            <button type="submit">Look up</button>
+        </form>
+    </div>
+
+    {% if preview %}
+    <div class="ticket">
+        <h2>Amount due</h2>
+        <div class="ticket-row"><span>Plate</span><strong>{{ preview.plate_number }}</strong></div>
+        <div class="ticket-row"><span>Entry</span><strong>{{ preview.entry_time.strftime('%H:%M:%S') }}</strong></div>
+        <div class="ticket-row"><span>Duration</span><strong>{{ preview.minutes }} min</strong></div>
+        <div class="ticket-total"><span>Total</span><span>Kshs. {{ preview.fee }}</span></div>
+        <div class="barcode"></div>
+    </div>
+    <div style="text-align:center;">
+        <form method="POST" action="{{ url_for('checkout_pay') }}" class="payment-form">
+            <input type="hidden" name="plate_number" value="{{ preview.plate_number }}">
+            <label for="phone_number">M-Pesa phone number</label>
+            <input id="phone_number" type="text" name="phone_number"
+                   placeholder="0712345678" inputmode="tel" required>
+            <button type="submit">Send M-Pesa prompt</button>
+        </form>
+    </div>
+    {% endif %}
+</main>
+</body>
+</html>

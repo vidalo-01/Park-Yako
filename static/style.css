@@ -1,0 +1,302 @@
+/* ===================================================================
+   Smart Gate — visual identity
+   Grounded in the physical world of a car-park gate: hazard-striped
+   boom arms, LED availability boards, painted tarmac bays, ticket
+   machines and thermal-printed receipts. Not a generic SaaS skin.
+   =================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Big+Shoulders+Stencil:wght@600;800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;600&display=swap');
+
+:root {
+    --asphalt: #1f2226;
+    --asphalt-light: #2b2f35;
+    --asphalt-seam: #3a3f47;
+    --paint-yellow: #ffc72c;
+    --signal-green: #2f855a;
+    --signal-green-wash: rgba(47, 133, 90, 0.22);
+    --signal-red: #c53030;
+    --signal-red-wash: rgba(197, 48, 48, 0.22);
+    --paper: #f2ead9;
+    --paper-edge: #e2d8c0;
+    --ink: #201c16;
+    --text: #ece7dd;
+    --text-dim: #a9a79f;
+}
+
+* { box-sizing: border-box; }
+
+body {
+    font-family: 'IBM Plex Sans', Arial, sans-serif;
+    background: var(--asphalt);
+    background-image: radial-gradient(circle at 50% 0%, #262a30 0%, var(--asphalt) 60%);
+    color: var(--text);
+    margin: 0;
+    padding: 0 0 4rem 0;
+}
+
+h1, h2, .stencil {
+    font-family: 'Big Shoulders Stencil', 'IBM Plex Sans', sans-serif;
+    font-weight: 800;
+    letter-spacing: 0.02em;
+    margin: 0;
+}
+
+/* ---------- Header: a boom gate ---------- */
+.hazard-strip {
+    height: 10px;
+    background: repeating-linear-gradient(
+        45deg,
+        var(--paint-yellow) 0 18px,
+        #1a1a1a 18px 36px
+    );
+}
+
+header {
+    background: var(--asphalt-light);
+    border-bottom: 1px solid var(--asphalt-seam);
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.brand { display: flex; align-items: center; gap: 0.6rem; }
+.brand svg { flex-shrink: 0; }
+.brand h1 { font-size: 1.5rem; color: var(--text); }
+.brand span.tag { font-family: 'IBM Plex Mono', monospace; font-size: 0.7rem; color: var(--text-dim); display: block; margin-top: 2px; }
+
+header nav a {
+    color: var(--text-dim);
+    text-decoration: none;
+    margin-left: 1.5rem;
+    font-size: 0.95rem;
+    border-bottom: 2px solid transparent;
+    padding-bottom: 3px;
+}
+header nav a:hover { color: var(--paint-yellow); border-bottom-color: var(--paint-yellow); }
+
+main { max-width: 920px; margin: 2.5rem auto; padding: 0 1.5rem; }
+
+/* ---------- Hero: LED availability board ---------- */
+.gate-board {
+    background: #111315;
+    border: 3px solid #050607;
+    box-shadow: inset 0 0 24px rgba(0,0,0,0.6);
+    padding: 1.8rem 1.5rem;
+    text-align: center;
+    margin-bottom: 2rem;
+}
+.gate-board .digits {
+    font-family: 'Big Shoulders Stencil', sans-serif;
+    font-weight: 800;
+    font-size: 4rem;
+    line-height: 1;
+    color: var(--paint-yellow);
+    text-shadow: 0 0 14px rgba(255, 199, 44, 0.55);
+    letter-spacing: 0.03em;
+}
+.gate-board .digits .of { color: #6b6f76; font-size: 2.4rem; margin: 0 0.3rem; }
+.gate-board .caption {
+    font-family: 'IBM Plex Mono', monospace;
+    color: #7fae91;
+    font-size: 0.85rem;
+    margin-top: 0.5rem;
+    letter-spacing: 0.12em;
+}
+.gate-board .caption.full { color: var(--signal-red); }
+
+/* ---------- Painted bays (slot grid) ---------- */
+.bay-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(84px, 1fr));
+    gap: 10px;
+    margin-bottom: 2rem;
+}
+.bay {
+    border: 2px dashed rgba(236, 231, 221, 0.32);
+    padding: 0.9rem 0.3rem 0.6rem;
+    text-align: center;
+    font-family: 'IBM Plex Mono', monospace;
+    font-weight: 600;
+    color: var(--text);
+    background: transparent;
+}
+.bay.available { background: var(--signal-green-wash); border-color: rgba(47,133,90,0.6); }
+.bay.occupied { background: var(--signal-red-wash); border-color: rgba(197,48,48,0.6); }
+.bay .plate {
+    display: inline-block;
+    margin-top: 6px;
+    background: #f4f4f4;
+    color: #111;
+    border: 1.5px solid #111;
+    border-radius: 3px;
+    font-size: 0.62rem;
+    font-weight: 700;
+    padding: 1px 4px;
+    letter-spacing: 0.03em;
+}
+
+/* ---------- Kiosk panel (forms) ---------- */
+.kiosk {
+    background: var(--asphalt-light);
+    border-top: 4px solid var(--paint-yellow);
+    padding: 1.3rem 1.4rem;
+    margin-bottom: 1.6rem;
+}
+.kiosk h2 { font-size: 1.15rem; color: var(--text); margin-bottom: 0.8rem; }
+
+input[type=text] {
+    font-family: 'IBM Plex Mono', monospace;
+    padding: 0.65rem 0.7rem;
+    border: 1px solid var(--asphalt-seam);
+    background: #15181b;
+    color: var(--text);
+    width: 55%;
+    margin-right: 0.5rem;
+    border-radius: 0;
+}
+input[type=text]::placeholder { color: #6b6f76; }
+
+button {
+    font-family: 'IBM Plex Sans', sans-serif;
+    padding: 0.65rem 1.3rem;
+    border: 2px solid #111;
+    border-radius: 0;
+    background: var(--paint-yellow);
+    color: #16130a;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 3px 3px 0 #000;
+    transition: transform 0.08s ease, box-shadow 0.08s ease;
+}
+button:hover { background: #ffd257; }
+button:active { transform: translate(3px, 3px); box-shadow: 0 0 0 #000; }
+
+/* ---------- Flash messages ---------- */
+.flash {
+    padding: 0.7rem 1rem;
+    margin-bottom: 1rem;
+    border-left: 4px solid;
+    font-size: 0.95rem;
+}
+.flash.success { background: rgba(47,133,90,0.18); border-color: var(--signal-green); }
+.flash.error { background: rgba(197,48,48,0.18); border-color: var(--signal-red); }
+
+/* ---------- Boom-gate animation (exit confirmation) ---------- */
+.gate-scene {
+    background: var(--asphalt-light);
+    padding: 2.2rem 1.5rem 1.6rem;
+    text-align: center;
+    margin-bottom: 1.6rem;
+    overflow: hidden;
+}
+.gate-mechanism { position: relative; height: 90px; width: 220px; margin: 0 auto 0.8rem; }
+.gate-post {
+    position: absolute; left: 6px; bottom: 0;
+    width: 16px; height: 90px; background: var(--asphalt-seam);
+}
+.gate-arm {
+    position: absolute; left: 14px; bottom: 82px;
+    width: 190px; height: 14px;
+    background: repeating-linear-gradient(90deg, var(--paint-yellow) 0 16px, #1a1a1a 16px 32px);
+    transform-origin: left center;
+    transform: rotate(0deg);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.4);
+}
+.gate-scene.open .gate-arm { animation: lift 0.9s ease-out forwards; }
+@keyframes lift {
+    to { transform: rotate(-78deg); }
+}
+.gate-status {
+    font-family: 'Big Shoulders Stencil', sans-serif;
+    font-size: 1.7rem;
+    color: var(--signal-green);
+    letter-spacing: 0.04em;
+}
+
+/* ---------- Ticket / receipt ---------- */
+.ticket {
+    background: var(--paper);
+    color: var(--ink);
+    max-width: 380px;
+    margin: 0 auto 1.6rem;
+    padding: 1.6rem 1.4rem 1.2rem;
+    font-family: 'IBM Plex Mono', monospace;
+    position: relative;
+    border-bottom: 1px dashed #b9ae8e;
+}
+.ticket::before {
+    content: "";
+    display: block;
+    position: absolute;
+    top: -8px; left: 0; right: 0; height: 16px;
+    background: radial-gradient(circle at 8px 8px, var(--asphalt) 8px, transparent 9px);
+    background-size: 16px 16px;
+    background-repeat: repeat-x;
+}
+.ticket h2 {
+    font-family: 'Big Shoulders Stencil', sans-serif;
+    color: var(--ink);
+    font-size: 1.3rem;
+    text-align: center;
+    margin-bottom: 0.9rem;
+}
+.ticket-row {
+    display: flex; justify-content: space-between;
+    padding: 0.35rem 0;
+    border-bottom: 1px dashed var(--paper-edge);
+    font-size: 0.92rem;
+}
+.ticket-row strong { font-weight: 600; }
+.ticket-total {
+    display: flex; justify-content: space-between;
+    padding-top: 0.7rem; margin-top: 0.4rem;
+    font-size: 1.15rem; font-weight: 700;
+}
+.barcode {
+    margin-top: 1.1rem;
+    height: 36px;
+    background: repeating-linear-gradient(
+        90deg, var(--ink) 0 2px, transparent 2px 4px,
+        var(--ink) 4px 5px, transparent 5px 9px,
+        var(--ink) 9px 12px, transparent 12px 14px
+    );
+}
+
+/* ---------- Ledger (history table) ---------- */
+.ledger-wrap { background: var(--paper); padding: 0.5rem 1rem 1rem; }
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: 'IBM Plex Mono', monospace;
+    color: var(--ink);
+    font-size: 0.88rem;
+}
+th, td { padding: 0.55rem 0.6rem; text-align: left; border-bottom: 1px dashed var(--paper-edge); }
+th { font-weight: 600; border-bottom: 2px solid var(--ink); }
+
+a.button-link { text-decoration: none; }
+
+
+/* ---------- M-Pesa checkout ---------- */
+.payment-form {
+    margin-top: 1rem;
+}
+.payment-form label {
+    display: block;
+    font-family: 'IBM Plex Mono', monospace;
+    color: var(--text-dim);
+    font-size: 0.8rem;
+    margin-bottom: 0.35rem;
+}
+.payment-form input[type=text] {
+    width: 55%;
+}
+.payment-wait {
+    text-align: center;
+}
+.payment-state {
+    font-family: 'IBM Plex Mono', monospace;
+    color: var(--paint-yellow);
+    margin-top: 1rem;
+}
